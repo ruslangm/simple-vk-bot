@@ -1,7 +1,6 @@
 package simplebot.executor;
 
 import com.grum.geocalc.Coordinate;
-import com.grum.geocalc.EarthCalc;
 import com.grum.geocalc.Point;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;
@@ -18,9 +17,7 @@ import simplebot.enums.CharityKeyboard;
 import simplebot.utils.Strings;
 import simplebot.utils.Utils;
 
-import javax.rmi.CORBA.Util;
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
+import java.io.IOException;
 import java.util.Properties;
 
 public class QryExecutor {
@@ -63,7 +60,7 @@ public class QryExecutor {
                 .execute();
     }
 
-    public void sendOrganizationsBasedOnUserLocation(int id, User user, Geo geo) throws ClientException, ApiException, UnsupportedEncodingException {
+    public void sendOrganizationsBasedOnUserLocation(int id, User user, Geo geo) throws ClientException, ApiException, IOException {
         String msg = String.format("Вижу тебя, %s! Ты в %s, %s. \n" +
                         "Cписок ближайших к тебе организаций и центров помощи животным: \n\n",
                 user.getFirstName(), geo.getPlace().getCountry(), geo.getPlace().getCity());
@@ -72,6 +69,8 @@ public class QryExecutor {
         organization.setPhoneNumber("8-999-123-45-67");
         msg = msg + organization.toString();
 
+//        ClientResponse response = client.getTransportClient().get("http://localhost:8090/orgs/getAll");
+//        String content = response.getContent();
         client.messages().send(actor)
                 .userId(id)
                 .message(msg)
